@@ -149,9 +149,32 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
         type: 2}
-      propertyPath: input_map
+      propertyPath: empty_square
       value: 
-      objectReference: {fileID: 4900000, guid: e2326e54cce6b324da389d9dcc294bf7, type: 3}
+      objectReference: {fileID: 1018104560710190, guid: 8f41d6e27be5af64980063268e115b63,
+        type: 2}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: void_square
+      value: 
+      objectReference: {fileID: 1013080931221808, guid: 5a351ca0dafdd904e8e9b94a9bea8440,
+        type: 2}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: tree_square
+      value: 
+      objectReference: {fileID: 1017110862546666, guid: e3960821c9afd584390658957bf403ce,
+        type: 2}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: image_square_size
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: num_squares_per_tile
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e8038a02be0fba142b16a1885557e526, type: 2}
   m_IsPrefabParent: 0
