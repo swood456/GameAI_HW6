@@ -27,9 +27,11 @@ public class CreateWorldFromMap : MonoBehaviour {
     string type;
     int height;
     int width;
+    GameObject map_root;
 
     // Use this for initialization
     void Start () {
+        map_root = new GameObject("Map_Root");
         CreateMap();
 	}
 	
@@ -40,19 +42,16 @@ public class CreateWorldFromMap : MonoBehaviour {
         type = lines[0].Split(' ')[1];
         height = int.Parse(lines[1].Split(' ')[1]);
         width = int.Parse(lines[2].Split(' ')[1]);
-
-        print(type);
-        print(height);
-        print(width);
-        print(lines.Length);
+        
 
         float left_side = -width * image_square_size / 2;
         float top = height * image_square_size / 2;
-        for(int j = 3; j < lines.Length; ++j)
+        for(int j = 4; j < lines.Length; ++j)
         {
-            //print("doing a row!");
-            for(int i = 0; i < lines[j].Length; ++i )
+            //print("doing row " + (j-3) +" of size " + lines[j].Length);
+            for(int i = 0; i < width; ++i )
             {
+                
                 GameObject to_spawn;
 
                 switch(lines[j][i])
@@ -68,7 +67,7 @@ public class CreateWorldFromMap : MonoBehaviour {
                         break;
                 }
 
-                Instantiate(to_spawn, new Vector3(left_side + i * image_square_size, top - j * image_square_size, 0), Quaternion.identity);
+                Instantiate(to_spawn, new Vector3(left_side + i * image_square_size, top - (j-4) * image_square_size, 0), Quaternion.identity, map_root.transform);
             }
         }
     }
