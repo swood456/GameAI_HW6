@@ -173,7 +173,7 @@ Prefab:
     - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
         type: 2}
       propertyPath: num_squares_per_tile
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
         type: 2}
@@ -182,7 +182,17 @@ Prefab:
       objectReference: {fileID: 4900000, guid: ec5ef7ceb85f9a441a259b6c6514287d, type: 3}
     - target: {fileID: 1309794396732618, guid: e8038a02be0fba142b16a1885557e526, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: num_squares_per_tile_x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: num_squares_per_tile_y
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e8038a02be0fba142b16a1885557e526, type: 2}
@@ -314,6 +324,10 @@ Prefab:
     - target: {fileID: 4086249696178358, guid: 97bbaa8b54568dc48ba8a402c3bc3ebd, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975285595851178, guid: 97bbaa8b54568dc48ba8a402c3bc3ebd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 97bbaa8b54568dc48ba8a402c3bc3ebd, type: 2}
