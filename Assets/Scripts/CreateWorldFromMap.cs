@@ -60,7 +60,7 @@ public class CreateWorldFromMap : MonoBehaviour {
             Vector3 f_pos = c.ScreenToWorldPoint(new Vector3(mouse_pos_world.x, mouse_pos_world.y, c.nearClipPlane));
             f_pos.z = 0.0f;
 
-            // make sure the space is within the map
+            // TODO: make sure the space is within the map
 
             if (Input.GetKeyDown(KeyCode.S))
             {
@@ -79,6 +79,18 @@ public class CreateWorldFromMap : MonoBehaviour {
     {
         if (!start_placed || !end_placed)
             return;
+
+        // first, locate what square the start and end is in
+        int s_i, s_j, e_i, e_j;
+        // x = left_side + i * image_square_size
+
+        // NEED TO ROUND THESE!
+        //  otherwise they will not go to nearest, just one to the left!
+        s_i = Mathf.RoundToInt((startPoint.transform.position.x - left_side) / image_square_size);
+        s_j = -Mathf.RoundToInt((startPoint.transform.position.y - top) / image_square_size);
+
+        e_i = Mathf.RoundToInt((endPoint.transform.position.x - left_side) / image_square_size);
+        e_j = -Mathf.RoundToInt((endPoint.transform.position.y - top) / image_square_size);
     }
 
     private void CreateMap()
