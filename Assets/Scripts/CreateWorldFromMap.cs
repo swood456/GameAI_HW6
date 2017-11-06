@@ -61,7 +61,7 @@ public class CreateWorldFromMap : MonoBehaviour {
             mouse_pos_world.y = Input.mousePosition.y;
 
             Vector3 f_pos = c.ScreenToWorldPoint(new Vector3(mouse_pos_world.x, mouse_pos_world.y, c.nearClipPlane));
-            f_pos.z = 0.0f;
+            f_pos.z = -1.0f;
 
             // TODO: make sure the space is within the map
 
