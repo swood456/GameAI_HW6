@@ -27,24 +27,58 @@ public class CreateWorldFromMap : MonoBehaviour {
     [SerializeField]
     private int num_squares_per_tile_y;
 
+    public GameObject startPoint;
+    public GameObject endPoint;
+
     string type;
     int height;
     int width;
     int tile_map_width;
     int tile_map_height;
+    float left_side;
+    float top;
     GameObject map_root;
-    //bool[,] sqaure_map;
     float[,] map_representation;
+    bool start_placed = false;
+    bool end_placed = false;
 
     // Use this for initialization
     void Start () {
         map_root = new GameObject("Map_Root");
         CreateMap();
-
 	}
-	
-    private void CreateTileGrid()
+
+    private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.E))
+        {
+            Camera c = Camera.main;
+            Vector2 mouse_pos_world;
+            mouse_pos_world.x = Input.mousePosition.x;
+            mouse_pos_world.y = Input.mousePosition.y;
+
+            Vector3 f_pos = c.ScreenToWorldPoint(new Vector3(mouse_pos_world.x, mouse_pos_world.y, c.nearClipPlane));
+            f_pos.z = 0.0f;
+
+            // make sure the space is within the map
+
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                startPoint.transform.position = f_pos;
+                start_placed = true;
+            }
+            else
+            {
+                endPoint.transform.position = f_pos;
+                end_placed = true;
+            }
+        }
+    }
+
+    public void FindPath()
+    {
+        if (!start_placed || !end_placed)
+            return;
     }
 
     private void CreateMap()
@@ -61,8 +95,8 @@ public class CreateWorldFromMap : MonoBehaviour {
         map_representation = new float[tile_map_width, tile_map_height];
         int tile_area = num_squares_per_tile_x * num_squares_per_tile_y;
 
-        float left_side = -width * image_square_size / 2;
-        float top = height * image_square_size / 2;
+        left_side = -width * image_square_size / 2;
+        top = height * image_square_size / 2;
         for (int j = 4; j < lines.Length; ++j)
         {
             for(int i = 0; i < width; ++i )
