@@ -30,6 +30,9 @@ public class CreateWorldFromMap : MonoBehaviour {
     public GameObject startPoint;
     public GameObject endPoint;
 
+    [SerializeField]
+    private float tile_threshold_to_move = 0.5f;
+
     string type;
     int height;
     int width;
@@ -82,15 +85,51 @@ public class CreateWorldFromMap : MonoBehaviour {
 
         // first, locate what square the start and end is in
         int s_i, s_j, e_i, e_j;
-        // x = left_side + i * image_square_size
-
-        // NEED TO ROUND THESE!
-        //  otherwise they will not go to nearest, just one to the left!
+        
         s_i = Mathf.RoundToInt((startPoint.transform.position.x - left_side) / image_square_size);
         s_j = -Mathf.RoundToInt((startPoint.transform.position.y - top) / image_square_size);
 
         e_i = Mathf.RoundToInt((endPoint.transform.position.x - left_side) / image_square_size);
         e_j = -Mathf.RoundToInt((endPoint.transform.position.y - top) / image_square_size);
+
+        if(s_i < 0 || s_i >= width || s_j < 0 || s_j >= height)
+        {
+            print("error: placed start tile off map");
+            return;
+        }
+
+        if (e_i < 0 || e_i >= width || e_j < 0 || e_j >= height)
+        {
+            print("error: placed end tile off map");
+            return;
+        }
+
+        int s_x = s_i / num_squares_per_tile_x, s_y = s_j / num_squares_per_tile_y;
+        if(map_representation[s_x, s_y] > tile_threshold_to_move)
+        {
+            print("placed start tile on a tile deemed unmovable");
+            return;
+        }
+
+        int e_x = e_i / num_squares_per_tile_x, e_y = e_j - 4 / num_squares_per_tile_y;
+        if (map_representation[e_x, e_y] > tile_threshold_to_move)
+        {
+            print("placed end tile on a tile deemed unmovable");
+            return;
+        }
+
+        // now actually do a*
+        print("I think I can I think I can!");
+    }
+
+    private float HeuristicEuclidianDist(int x, int y, int endX, int endY)
+    {
+        return Mathf.Sqrt((x - endX) * (x - endX) + (y - endY) * (y - endY));
+    }
+
+    private float HeuristicManhattanDist(int x, int y, int endX, int endY)
+    {
+        return Mathf.Abs(endX - x) + Mathf.Abs(endY - y);
     }
 
     private void CreateMap()
