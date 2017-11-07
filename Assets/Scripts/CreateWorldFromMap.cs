@@ -117,17 +117,21 @@ public class CreateWorldFromMap : MonoBehaviour {
 
     public void print_path()
     {
-        List<Point> l = FindPath();
+        List<Vector2> l = FindPath();
         if (l == null)
             return;
-        foreach(Point p in l)
+        foreach (Vector2 p in l)
         {
             print(p.x + ", " + p.y);
         }
+        PlayerFollowGridPath player = FindObjectOfType<PlayerFollowGridPath>();
+        player.enabled = true;
+        player.transform.position = startPoint.transform.position;
+        player.FollowPath(l, endPoint.transform.position);
     }
 
     //public List<Point> FindPath()
-    public List<Point> FindPath()
+    public List<Vector2> FindPath()
     {
         if (!start_placed || !end_placed)
             return null;
@@ -188,13 +192,16 @@ public class CreateWorldFromMap : MonoBehaviour {
             // if this node is the goal
             if(best_point.x == e_x && best_point.y == e_y)
             {
-                List<Point> path = new List<Point>();
+                List<Vector2> path = new List<Vector2>();
 
                 Point p = best_point;
 
                 while(p != null)
                 {
-                    path.Insert(0, p);
+                    float fx = left_side + p.x * num_squares_per_tile_x * image_square_size;
+                    float fy = top - p.y * num_squares_per_tile_y * image_square_size;
+                    path.Insert(0, new Vector2(fx, fy));
+                    //path.Insert(0, new Vector2(p.x, p.y));
                     p = p.parent;
                 }
 
@@ -214,10 +221,7 @@ public class CreateWorldFromMap : MonoBehaviour {
                 successor.parent = best_point;
 
                 //MIT psuedocode
-
-                // I think this should find a point that has same x,y as sucessor?? - it does not
-                // code modified from https://msdn.microsoft.com/en-us/library/5kthb929(v=vs.110).aspx
-                
+                                
                 Point same = FindXYInPointList(open_points, successor.x, successor.y);
 
                 if(same != null)
