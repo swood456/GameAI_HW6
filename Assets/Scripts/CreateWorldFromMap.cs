@@ -70,7 +70,7 @@ public class CreateWorldFromMap : MonoBehaviour {
     public GameObject startPoint;
     public GameObject endPoint;
     public GameObject tile_outline;
-    
+    public GameObject redDot;
 
     [SerializeField]
     private float tile_threshold_to_move = 0.5f;
@@ -279,6 +279,9 @@ public class CreateWorldFromMap : MonoBehaviour {
                 if(same_close == null && same_open == null)
                 {
                     open_points.Add(successor);
+                    float x = left_side + successor.x * num_squares_per_tile_x * image_square_size;
+                    float y = top - successor.y * num_squares_per_tile_y * image_square_size;
+                    Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity);
                 }
             }
 

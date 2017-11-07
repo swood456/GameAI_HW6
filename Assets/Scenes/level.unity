@@ -251,6 +251,17 @@ Prefab:
       propertyPath: endPoint
       value: 
       objectReference: {fileID: 712342336}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: redDot
+      value: 
+      objectReference: {fileID: 1469862419498856, guid: 399038d238592da4396d99b557f4608f,
+        type: 2}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: tile_threshold_to_move
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e8038a02be0fba142b16a1885557e526, type: 2}
   m_IsPrefabParent: 0
