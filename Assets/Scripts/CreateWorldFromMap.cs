@@ -43,6 +43,9 @@ public class Point
 
 public class CreateWorldFromMap : MonoBehaviour {
 
+    public enum HeuristicType { Euclidian, Manhattan};
+    public HeuristicType m_heruistic;
+
     [SerializeField]
     private TextAsset input_map;
 
@@ -175,8 +178,6 @@ public class CreateWorldFromMap : MonoBehaviour {
         }
 
         // now actually do a*
-        print("I think I can I think I can!");
-
         List<Point> open_points = new List<Point>();
         open_points.Add(new Point(s_x, s_y));
 
@@ -212,16 +213,14 @@ public class CreateWorldFromMap : MonoBehaviour {
             List<Point> neighbors = GetAdjacentOpenTiles(best_point.x, best_point.y);
             foreach(Point p in neighbors)
             {
+                //MIT psuedocode
                 Point successor = p;
                 successor.g = best_point.g + 1;
-                successor.h = HeuristicEuclidianDist(successor.x, successor.y, e_x, e_y);
+                successor.h = Heuristic(successor.x, successor.y, e_x, e_y);
                 successor.f = successor.g + successor.h;
                 successor.parent = best_point;
-
-                //MIT psuedocode
-                                
+                       
                 Point same = FindXYInPointList(open_points, successor.x, successor.y);
-
                 if(same != null)
                 {
                     //if a node with the same position as successor is in the OPEN list \
@@ -232,7 +231,6 @@ public class CreateWorldFromMap : MonoBehaviour {
                     }
                     
                 }
-
                 //if a node with the same position as successor is in the CLOSED list \ 
                 //    which has a lower f than successor, skip this successor
                 same = FindXYInPointList(close_points, successor.x, successor.y);
@@ -246,17 +244,18 @@ public class CreateWorldFromMap : MonoBehaviour {
 
 
                 //PROF SLIDE PSUEDOCODE:
-                //if this neighbor is in the closest list and our current g value is lower
+                //if this neighbor is in the closed list and our current g value is lower
                 // update the neighbor with the new, lower g value
                 // change the neighbor's parent to our current node
 
 
                 // else if this neighbor is in the open list and our current g value is lower
-                // update the neighbor iwth the new, lower g value
+                // update the neighbor with the new, lower g value
                 // change the neighbor's parent to our current node
 
-                // else the neight is not iin either the open or closes list
-                // add the neighbor to the open list and ste its g value
+                // else the neighbor is not in either the open or closes list
+                // add the neighbor to the open list and set its g value
+                // making us the parent
             }
 
             close_points.Add(best_point);
@@ -325,6 +324,19 @@ public class CreateWorldFromMap : MonoBehaviour {
             adjacent.Add(new Point(x, y + 1));
         }
         return adjacent;
+    }
+
+    private float Heuristic(int x, int y, int endX, int endY)
+    {
+        switch (m_heruistic)
+        {
+            case HeuristicType.Euclidian:
+                return HeuristicEuclidianDist(x, y, endX, endY);
+            case HeuristicType.Manhattan:
+                return HeuristicManhattanDist(x, y, endX, endY);
+        }
+        // in case something broke?
+        return 0.0f;
     }
 
     private float HeuristicEuclidianDist(int x, int y, int endX, int endY)
