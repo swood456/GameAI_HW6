@@ -273,7 +273,7 @@ Prefab:
         type: 2}
       propertyPath: input_map
       value: 
-      objectReference: {fileID: 4900000, guid: ec5ef7ceb85f9a441a259b6c6514287d, type: 3}
+      objectReference: {fileID: 4900000, guid: e2326e54cce6b324da389d9dcc294bf7, type: 3}
     - target: {fileID: 1309794396732618, guid: e8038a02be0fba142b16a1885557e526, type: 2}
       propertyPath: m_IsActive
       value: 1
@@ -718,6 +718,7 @@ GameObject:
   - component: {fileID: 1258932752}
   - component: {fileID: 1258932751}
   - component: {fileID: 1258932750}
+  - component: {fileID: 1258932755}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -795,6 +796,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1258932755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1258932749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a04ba5db0bd0a864f9b22559a5344304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movespeed: 4
 --- !u!1 &1450059288
 GameObject:
   m_ObjectHideFlags: 0
