@@ -69,6 +69,7 @@ public class CreateWorldFromMap : MonoBehaviour {
 
     public GameObject startPoint;
     public GameObject endPoint;
+    public GameObject tile_outline;
     
 
     [SerializeField]
@@ -411,6 +412,16 @@ public class CreateWorldFromMap : MonoBehaviour {
                 }
 
                 Instantiate(to_spawn, new Vector3(left_side + i * image_square_size, top - (j-4) * image_square_size, 0), Quaternion.identity, map_root.transform);
+            }
+        }
+
+        for(int j = 0; j < tile_map_height; ++j)
+        {
+            for(int i = 0; i < tile_map_width; ++i)
+            {
+                float x = left_side + i * num_squares_per_tile_x * image_square_size;
+                float y = top - j * num_squares_per_tile_y * image_square_size;
+                Instantiate(tile_outline, new Vector2(x,y), Quaternion.identity);
             }
         }
 

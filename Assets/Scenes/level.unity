@@ -243,53 +243,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
         type: 2}
-      propertyPath: empty_square
-      value: 
-      objectReference: {fileID: 1018104560710190, guid: 8f41d6e27be5af64980063268e115b63,
-        type: 2}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: void_square
-      value: 
-      objectReference: {fileID: 1013080931221808, guid: 5a351ca0dafdd904e8e9b94a9bea8440,
-        type: 2}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: tree_square
-      value: 
-      objectReference: {fileID: 1017110862546666, guid: e3960821c9afd584390658957bf403ce,
-        type: 2}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: image_square_size
-      value: 0.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: num_squares_per_tile
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: input_map
-      value: 
-      objectReference: {fileID: 4900000, guid: e2326e54cce6b324da389d9dcc294bf7, type: 3}
-    - target: {fileID: 1309794396732618, guid: e8038a02be0fba142b16a1885557e526, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: num_squares_per_tile_x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: num_squares_per_tile_y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 600402402}
@@ -298,23 +251,6 @@ Prefab:
       propertyPath: endPoint
       value: 
       objectReference: {fileID: 712342336}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: cyan_outline
-      value: 
-      objectReference: {fileID: 1743294370265220, guid: 9fc851cfdf312fe45840623cff4d21c6,
-        type: 2}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: red_outline
-      value: 
-      objectReference: {fileID: 1919510372071848, guid: 0ba960d5c5172a24a9a6c4b5d841fb0a,
-        type: 2}
-    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
-        type: 2}
-      propertyPath: tile_threshold_to_move
-      value: 0.7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e8038a02be0fba142b16a1885557e526, type: 2}
   m_IsPrefabParent: 0
