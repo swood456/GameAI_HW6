@@ -4,13 +4,15 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-public struct Point
+public class Point
 {
     public int x;
     public int y;
     public float f;
     public float g;
     public float h;
+
+    public Point parent;
     // TODO: parnets | C# doesn't like a point having a point variable :(
     public Point(int _x, int _y, float _f = 0.0f, float _g = 0.0f, float _h = 0.0f)
     {
@@ -19,6 +21,7 @@ public struct Point
         f = _f;
         g = _g;
         h = _h;
+        parent = null;
     }
 
     // equality nonsense | maybe don't need??
@@ -112,11 +115,22 @@ public class CreateWorldFromMap : MonoBehaviour {
         }
     }
 
+    public void print_path()
+    {
+        List<Point> l = FindPath();
+        if (l == null)
+            return;
+        foreach(Point p in l)
+        {
+            print(p.x + ", " + p.y);
+        }
+    }
+
+    //public List<Point> FindPath()
     public List<Point> FindPath()
     {
-        List<Point> path = new List<Point>();
         if (!start_placed || !end_placed)
-            return path;
+            return null;
 
         // first, locate what square the start and end is in
         int s_i, s_j, e_i, e_j;
@@ -130,27 +144,29 @@ public class CreateWorldFromMap : MonoBehaviour {
         if(s_i < 0 || s_i >= width || s_j < 0 || s_j >= height)
         {
             print("error: placed start tile off map");
-            return path;
+            return null;
         }
 
         if (e_i < 0 || e_i >= width || e_j < 0 || e_j >= height)
         {
             print("error: placed end tile off map");
-            return path;
+            return null;
         }
 
         int s_x = s_i / num_squares_per_tile_x, s_y = s_j / num_squares_per_tile_y;
         if(map_representation[s_x, s_y] > tile_threshold_to_move)
         {
             print("placed start tile on a tile deemed unmovable");
-            return path;
+            return null;
         }
 
-        int e_x = e_i / num_squares_per_tile_x, e_y = e_j - 4 / num_squares_per_tile_y;
+        int e_x = e_i / num_squares_per_tile_x, e_y = e_j / num_squares_per_tile_y;
+        print(s_i + ", " + s_j + "|" + e_i + ", " + e_j);
+        print(s_x + ", " + s_y + "|" + e_x + ", " + e_y);
         if (map_representation[e_x, e_y] > tile_threshold_to_move)
         {
             print("placed end tile on a tile deemed unmovable");
-            return path;
+            return null;
         }
 
         // now actually do a*
@@ -172,13 +188,21 @@ public class CreateWorldFromMap : MonoBehaviour {
             // if this node is the goal
             if(best_point.x == e_x && best_point.y == e_y)
             {
-                break;
+                List<Point> path = new List<Point>();
+
+                Point p = best_point;
+
+                while(p != null)
+                {
+                    path.Insert(0, p);
+                    p = p.parent;
+                }
+
+                return path;
             }
 
             // else move the current node to the closest list and conisder all of its neighbors
             open_points.Remove(best_point);
-
-            float cur_g = 0.0f; // do this!!!!
 
             List<Point> neighbors = GetAdjacentOpenTiles(best_point.x, best_point.y);
             foreach(Point p in neighbors)
@@ -187,22 +211,20 @@ public class CreateWorldFromMap : MonoBehaviour {
                 successor.g = best_point.g + 1;
                 successor.h = HeuristicEuclidianDist(successor.x, successor.y, e_x, e_y);
                 successor.f = successor.g + successor.h;
+                successor.parent = best_point;
 
                 //MIT psuedocode
 
                 // I think this should find a point that has same x,y as sucessor?? - it does not
                 // code modified from https://msdn.microsoft.com/en-us/library/5kthb929(v=vs.110).aspx
-                Point? same = open_points.FindLast(
-                    delegate (Point pt)
-                    {
-                        return p.x == successor.x && p.y == successor.y;
-                    });
+                
+                Point same = FindXYInPointList(open_points, successor.x, successor.y);
 
                 if(same != null)
                 {
                     //if a node with the same position as successor is in the OPEN list \
                     //which has a lower f than successor, skip this successor
-                    if(same.Value.f < successor.f)
+                    if(same.f < successor.f)
                     {
                         continue;
                     }
@@ -211,16 +233,12 @@ public class CreateWorldFromMap : MonoBehaviour {
 
                 //if a node with the same position as successor is in the CLOSED list \ 
                 //    which has a lower f than successor, skip this successor
-                same = close_points.FindLast(
-                    delegate (Point pt)
-                    {
-                        return p.x == successor.x && p.y == successor.y;
-                    });
-                if(same != null && same.Value.f < successor.f)
+                same = FindXYInPointList(close_points, successor.x, successor.y);
+                if (same != null && same.f < successor.f)
                 {
                     continue;
                 }
-
+                
                 //otherwise, add the node to the open list
                 open_points.Add(successor);
 
@@ -244,8 +262,21 @@ public class CreateWorldFromMap : MonoBehaviour {
 
         }
 
-        print("found a path! count = " + count);
-        return path;
+        print("could not find path :( count = " + count);
+        return null;
+    }
+
+    private Point FindXYInPointList(List<Point> l, int x, int y)
+    {
+        foreach(Point p in l)
+        {
+            if(p.x == x && p.y == y)
+            {
+                return p;
+            }
+        }
+
+        return null;
     }
 
     private Point FindSmallestInList(List<Point> l)
