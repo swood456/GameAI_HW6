@@ -281,12 +281,12 @@ Prefab:
     - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
         type: 2}
       propertyPath: num_squares_per_tile_x
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
         type: 2}
       propertyPath: num_squares_per_tile_y
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
         type: 2}

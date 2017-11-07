@@ -213,13 +213,15 @@ public class CreateWorldFromMap : MonoBehaviour {
             List<Point> neighbors = GetAdjacentOpenTiles(best_point.x, best_point.y);
             foreach(Point p in neighbors)
             {
-                //MIT psuedocode
+                
                 Point successor = p;
                 successor.g = best_point.g + 1;
                 successor.h = Heuristic(successor.x, successor.y, e_x, e_y);
                 successor.f = successor.g + successor.h;
                 successor.parent = best_point;
-                       
+
+                //MIT psuedocode
+                /*
                 Point same = FindXYInPointList(open_points, successor.x, successor.y);
                 if(same != null)
                 {
@@ -241,21 +243,42 @@ public class CreateWorldFromMap : MonoBehaviour {
                 
                 //otherwise, add the node to the open list
                 open_points.Add(successor);
-
+                */
 
                 //PROF SLIDE PSUEDOCODE:
                 //if this neighbor is in the closed list and our current g value is lower
                 // update the neighbor with the new, lower g value
                 // change the neighbor's parent to our current node
-
-
+                Point same_close = FindXYInPointList(close_points, successor.x, successor.y);
+                if(same_close != null)
+                {
+                    if(successor.g < same_close.g)
+                    {
+                        same_close.g = successor.g;
+                        same_close.parent = best_point;
+                        continue;
+                    }
+                }
                 // else if this neighbor is in the open list and our current g value is lower
                 // update the neighbor with the new, lower g value
                 // change the neighbor's parent to our current node
+                Point same_open = FindXYInPointList(open_points, successor.x, successor.y);
+                if (same_open != null){
+                    if(successor.g < same_open.g)
+                    {
+                        same_open.g = successor.g;
+                        same_open.parent = best_point;
+                        continue;
+                    }
+                }
 
                 // else the neighbor is not in either the open or closes list
                 // add the neighbor to the open list and set its g value
                 // making us the parent
+                if(same_close == null && same_open == null)
+                {
+                    open_points.Add(successor);
+                }
             }
 
             close_points.Add(best_point);
