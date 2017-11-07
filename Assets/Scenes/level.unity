@@ -273,7 +273,7 @@ Prefab:
         type: 2}
       propertyPath: input_map
       value: 
-      objectReference: {fileID: 4900000, guid: ec5ef7ceb85f9a441a259b6c6514287d, type: 3}
+      objectReference: {fileID: 4900000, guid: f2ddd82f128466846a78714a25e12872, type: 3}
     - target: {fileID: 1309794396732618, guid: e8038a02be0fba142b16a1885557e526, type: 2}
       propertyPath: m_IsActive
       value: 1
@@ -298,6 +298,18 @@ Prefab:
       propertyPath: endPoint
       value: 
       objectReference: {fileID: 712342336}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: cyan_outline
+      value: 
+      objectReference: {fileID: 1743294370265220, guid: 9fc851cfdf312fe45840623cff4d21c6,
+        type: 2}
+    - target: {fileID: 114788784487932628, guid: e8038a02be0fba142b16a1885557e526,
+        type: 2}
+      propertyPath: red_outline
+      value: 
+      objectReference: {fileID: 1919510372071848, guid: 0ba960d5c5172a24a9a6c4b5d841fb0a,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e8038a02be0fba142b16a1885557e526, type: 2}
   m_IsPrefabParent: 0

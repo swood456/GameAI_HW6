@@ -66,6 +66,7 @@ public class CreateWorldFromMap : MonoBehaviour {
 
     public GameObject startPoint;
     public GameObject endPoint;
+    
 
     [SerializeField]
     private float tile_threshold_to_move = 0.5f;
@@ -180,12 +181,9 @@ public class CreateWorldFromMap : MonoBehaviour {
         open_points.Add(new Point(s_x, s_y));
 
         List<Point> close_points = new List<Point>();
-        int count = 0;
 
-        while(open_points.Count > 0 && count < 100)
+        while(open_points.Count > 0)
         {
-            count++; // there for debugging so we don't hit infinite loop
-
             // consider the best node in the open list
             Point best_point = FindSmallestInList(open_points);
 
@@ -266,7 +264,7 @@ public class CreateWorldFromMap : MonoBehaviour {
 
         }
 
-        print("could not find path :( count = " + count);
+        print("could not find path :(");
         return null;
     }
 
