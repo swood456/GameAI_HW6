@@ -13,7 +13,7 @@ public class Point
     public float h;
 
     public Point parent;
-    // TODO: parnets | C# doesn't like a point having a point variable :(
+
     public Point(int _x, int _y, float _f = 0.0f, float _g = 0.0f, float _h = 0.0f)
     {
         x = _x;
@@ -23,22 +23,6 @@ public class Point
         h = _h;
         parent = null;
     }
-
-    // equality nonsense | maybe don't need??
-    //public override bool Equals(object obj)
-    //{
-    //    return obj is Point && this == (Point)obj;
-    //}
-
-    //public static bool operator ==(Point a, Point b)
-    //{
-    //    return a.x == b.x && a.y == b.y;
-    //}
-
-    //public static bool operator !=(Point a, Point b)
-    //{
-    //    return !(a == b);
-    //}
 }
 
 public class CreateWorldFromMap : MonoBehaviour {
@@ -107,6 +91,7 @@ public class CreateWorldFromMap : MonoBehaviour {
 
     private void Update()
     {
+        // set start and end points
         if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.E))
         {
             Camera c = Camera.main;
@@ -132,28 +117,31 @@ public class CreateWorldFromMap : MonoBehaviour {
         }
     }
 
+    // Function that is run when you press the "Find Path" button
     public void print_path()
     {
         List<Vector2> l = FindPath();
+
+        // could not reach the end for some reason
         if (l == null)
             return;
-        foreach (Vector2 p in l)
-        {
-            print(p.x + ", " + p.y);
-        }
+
+        // Give the player object a path that it will follow
         PlayerFollowGridPath player = FindObjectOfType<PlayerFollowGridPath>();
+
+        // set up the player to move around
         player.enabled = true;
         player.transform.position = startPoint.transform.position;
         player.FollowPath(l, endPoint.transform.position);
     }
-
-    //public List<Point> FindPath()
+    
     public List<Vector2> FindPath()
     {
+        // make sure that the start and end points are located
         if (!start_placed || !end_placed)
             return null;
 
-        // first, locate what square the start and end is in
+        // Determine the square that the start and end points
         int s_i, s_j, e_i, e_j;
         
         s_i = Mathf.RoundToInt((startPoint.transform.position.x - left_side) / image_square_size);
@@ -162,6 +150,7 @@ public class CreateWorldFromMap : MonoBehaviour {
         e_i = Mathf.RoundToInt((endPoint.transform.position.x - left_side) / image_square_size);
         e_j = -Mathf.RoundToInt((endPoint.transform.position.y - top) / image_square_size);
 
+        // error if the start or end is outside of the square map
         if(s_i < 0 || s_i >= width || s_j < 0 || s_j >= height)
         {
             print("error: placed start tile off map");
@@ -174,6 +163,7 @@ public class CreateWorldFromMap : MonoBehaviour {
             return null;
         }
 
+        // find the tile that the start space is in
         int s_x = s_i / num_squares_per_tile_x, s_y = s_j / num_squares_per_tile_y;
         if(map_representation[s_x, s_y] > tile_threshold_to_move)
         {
@@ -181,95 +171,86 @@ public class CreateWorldFromMap : MonoBehaviour {
             return null;
         }
 
+        // find the tile that the end space is in
         int e_x = e_i / num_squares_per_tile_x, e_y = e_j / num_squares_per_tile_y;
-        print(s_i + ", " + s_j + "|" + e_i + ", " + e_j);
-        print(s_x + ", " + s_y + "|" + e_x + ", " + e_y);
         if (map_representation[e_x, e_y] > tile_threshold_to_move)
         {
             print("placed end tile on a tile deemed unmovable");
             return null;
         }
 
-        // now actually do a*
+        // run A*
+
+        // create the open points list and add the start
         List<Point> open_points = new List<Point>();
         open_points.Add(new Point(s_x, s_y));
 
+        // create the empty closed points list
         List<Point> close_points = new List<Point>();
 
         while(open_points.Count > 0)
         {
-            // consider the best node in the open list
+            // Consider the point with the smallest f value
             Point best_point = FindSmallestInList(open_points);
 
-            // if this node is the goal
+            // if this node is the goal, make out path and stop
             if(best_point.x == e_x && best_point.y == e_y)
             {
+                // make a list of vector2s to store the path
                 List<Vector2> path = new List<Vector2>();
 
+                // go through all the points and push them to the front of the list, then go to their parent
                 Point p = best_point;
-
                 while(p != null)
                 {
                     // equations to get the x and y pos in worldspace for our tiles.
                     float x = left_side + (num_squares_per_tile_x - (1.0f + num_squares_per_tile_x) / 2) * image_square_size + p.x * num_squares_per_tile_x * image_square_size;
                     float y = top - (num_squares_per_tile_y - (1.0f + num_squares_per_tile_y) / 2) * image_square_size - p.y * num_squares_per_tile_y * image_square_size;
+
+                    // push front of list
                     path.Insert(0, new Vector2(x, y));
-                    //path.Insert(0, new Vector2(p.x, p.y));
+
+                    // go to next node
                     p = p.parent;
                 }
 
                 return path;
             }
 
-            // else move the current node to the closest list and conisder all of its neighbors
+            // else move the current node to the closed list and conisder all of its neighbors
+
+            // remove this tile from the open list. After, add it to closed list
             open_points.Remove(best_point);
 
+            // get all the valid neighbors for this tile that we are looking at
             List<Point> neighbors = GetAdjacentOpenTiles(best_point.x, best_point.y);
             foreach(Point p in neighbors)
             {
-                
+                // make a new Point object for the successor
                 Point successor = p;
                 successor.g = best_point.g + 1;
                 successor.h = Heuristic(successor.x, successor.y, e_x, e_y);
                 successor.f = successor.g + successor.h;
                 successor.parent = best_point;
-
-                //MIT psuedocode
-                /*
-                Point same = FindXYInPointList(open_points, successor.x, successor.y);
-                if(same != null)
-                {
-                    //if a node with the same position as successor is in the OPEN list \
-                    //which has a lower f than successor, skip this successor
-                    if(same.f < successor.f)
-                    {
-                        continue;
-                    }
-                    
-                }
-                //if a node with the same position as successor is in the CLOSED list \ 
-                //    which has a lower f than successor, skip this successor
-                same = FindXYInPointList(close_points, successor.x, successor.y);
-                if (same != null && same.f < successor.f)
-                {
-                    continue;
-                }
                 
-                //otherwise, add the node to the open list
-                open_points.Add(successor);
-                */
-
                 //PROF SLIDE PSUEDOCODE:
                 //if this neighbor is in the closed list and our current g value is lower
                 // update the neighbor with the new, lower g value
                 // change the neighbor's parent to our current node
+
+                // See if there is a point in the close_points list with the same xy
                 Point same_close = FindXYInPointList(close_points, successor.x, successor.y);
+                // if there is and it has a higher g than the sucessor node we created
                 if(same_close != null)
                 {
                     if(successor.g < same_close.g)
                     {
+                        // update that node we found's g value
                         same_close.g = successor.g;
+
+                        // update its parent
                         same_close.parent = best_point;
+                        // don't do the other steps
                         continue;
                     }
                 }
@@ -295,20 +276,22 @@ public class CreateWorldFromMap : MonoBehaviour {
                     // equations to get the x and y pos in worldspace for our tiles.
                     float x = left_side + (num_squares_per_tile_x - (1.0f + num_squares_per_tile_x) / 2) * image_square_size + successor.x * num_squares_per_tile_x * image_square_size;
                     float y = top - (num_squares_per_tile_y - (1.0f + num_squares_per_tile_y) / 2) * image_square_size - successor.y * num_squares_per_tile_y * image_square_size;
-                    GameObject g = Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity);
-                    
+
+                    // make a red dot that signifies that we have started to look at this node but not yet considered its neighbors
+                    GameObject g = Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity); 
                 }
             }
 
+            // Add tile to closed list
             close_points.Add(best_point);
-
-
         }
 
+        // this means that we have looked at every node in open list and couldn't find a path. Probably want a slightly better UI thing for this
         print("could not find path :(");
         return null;
     }
 
+    // helper function that finds if ther is a point in the list with the given X Y co-ords
     private Point FindXYInPointList(List<Point> l, int x, int y)
     {
         foreach(Point p in l)
@@ -322,6 +305,7 @@ public class CreateWorldFromMap : MonoBehaviour {
         return null;
     }
 
+    // helper function that finds the point with the lowest F value in a list of points
     private Point FindSmallestInList(List<Point> l)
     {
         // never will have an empty list
@@ -338,8 +322,11 @@ public class CreateWorldFromMap : MonoBehaviour {
         return smallest_point;
     }
 
+    // helper function that determines all the valid neighbors to a given tile
     private List<Point> GetAdjacentOpenTiles(int x, int y)
     {
+        // for now, I only look at up,down,left,right and I use a simple threshold for seeing if something is valid or not
+        // this is a good place to do extra logic for seeing if a tile is valid
         List<Point> adjacent = new List<Point>();
 
         // left
@@ -368,8 +355,11 @@ public class CreateWorldFromMap : MonoBehaviour {
         return adjacent;
     }
 
+    // function that calculates the heuristic value for a tile at x,y given end at endX, endY
+    //  this uses the m_heuristic variable to determine which function to use
     private float Heuristic(int x, int y, int endX, int endY)
     {
+        // note: here is where we multiply by the weight, which can be set in the GUI
         switch (m_heruistic)
         {
             case HeuristicType.Euclidian:
@@ -381,38 +371,53 @@ public class CreateWorldFromMap : MonoBehaviour {
         return 0.0f;
     }
 
+    // simple distance formula
     private float HeuristicEuclidianDist(int x, int y, int endX, int endY)
     {
         return Mathf.Sqrt((x - endX) * (x - endX) + (y - endY) * (y - endY));
     }
 
+    // equation taken from slides
     private float HeuristicManhattanDist(int x, int y, int endX, int endY)
     {
         return Mathf.Abs(endX - x) + Mathf.Abs(endY - y);
     }
 
+    // function that creates the world from an input file
     private void CreateMap()
     {
+        // split the input text into lines
         string[] lines = input_map.text.Split('\n');
 
+        // type I think is useless?
         type = lines[0].Split(' ')[1];
+        // get the height and width of the map
         height = int.Parse(lines[1].Split(' ')[1]);
         width = int.Parse(lines[2].Split(' ')[1]);
 
+        // determine the number of tiles that we need for the map. We also want to make sure that the far edge is not cut off
         tile_map_width = width % num_squares_per_tile_x == 0 ? width / num_squares_per_tile_x : width / num_squares_per_tile_x + 1;
         tile_map_height = height % num_squares_per_tile_y == 0 ? height / num_squares_per_tile_y : height / num_squares_per_tile_y + 1;
 
+        // make a float 2d array to store the % of each tile that is covered
         map_representation = new float[tile_map_width, tile_map_height];
+
+        // helper int that is just the area of each tile (for creating the map_rep above)
         int tile_area = num_squares_per_tile_x * num_squares_per_tile_y;
 
+        // determine the left and right side of the map, so that the world is centered at or close to 0,0
         left_side = -width * image_square_size / 2;
         top = height * image_square_size / 2;
+
+        // go through all the stuff in the input file
         for (int j = 4; j < lines.Length; ++j)
         {
             for(int i = 0; i < width; ++i )
             {
-                
+                // determine which of the tiles we are making
                 GameObject to_spawn;
+
+                // determine which tile we are in currently
                 int m_x = i / num_squares_per_tile_x, m_y = (j-4) / num_squares_per_tile_y;
                 switch(lines[j][i])
                 {
@@ -428,11 +433,12 @@ public class CreateWorldFromMap : MonoBehaviour {
                         to_spawn = empty_square;
                         break;
                 }
-
+                // make a square at the correct point
                 Instantiate(to_spawn, new Vector3(left_side + i * image_square_size, top - (j-4) * image_square_size, 0), Quaternion.identity, map_root.transform);
             }
         }
 
+        // set up the tiles
         for(int j = 0; j < tile_map_height; ++j)
         {
             for(int i = 0; i < tile_map_width; ++i)
@@ -441,21 +447,12 @@ public class CreateWorldFromMap : MonoBehaviour {
                 float x = left_side + (num_squares_per_tile_x - (1.0f + num_squares_per_tile_x) / 2) * image_square_size + i * num_squares_per_tile_x * image_square_size;
                 float y = top - (num_squares_per_tile_y - (1.0f + num_squares_per_tile_y) / 2) * image_square_size - j * num_squares_per_tile_y * image_square_size;
 
+                // make a box around the tile, and scale it so that it fits around the edge
                 GameObject g = Instantiate(tile_outline, new Vector2(x,y), Quaternion.identity);
                 Vector3 scale = g.transform.localScale;
                 scale.x = (float)num_squares_per_tile_x / 2;
                 scale.y = (float)num_squares_per_tile_y / 2;
-
                 g.transform.localScale = scale;
-                print(g.transform.localScale);
-            }
-        }
-
-        for (int j = 0; j < tile_map_width; ++j)
-        {
-            for (int i = 0; i < tile_map_height; ++i)
-            {
-                print("i, j:" + i + ", " + j + " | " + map_representation[i, j]);
             }
         }
     }
