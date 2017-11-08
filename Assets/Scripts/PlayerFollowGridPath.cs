@@ -6,6 +6,8 @@ public class PlayerFollowGridPath : MonoBehaviour {
 
     [SerializeField]
     private float move_speed;
+    public int start_i = 1;
+    public int end_i = 1;
 
     List<Vector2> cur_path;
     int index = 1;
@@ -17,12 +19,12 @@ public class PlayerFollowGridPath : MonoBehaviour {
     {
         cur_path = path;
         end = end_pos;
-        index = 1;
+        index = start_i;
     }
 
     private void Update()
     {
-        if(index < cur_path.Count - 1)
+        if(index < cur_path.Count - end_i)
         {
             //print("dest: " + new Vector2(cur_path[index].x, cur_path[index].y));
             if (Vector2.Distance(transform.position, new Vector2(cur_path[index].x, cur_path[index].y)) < move_speed * Time.deltaTime)

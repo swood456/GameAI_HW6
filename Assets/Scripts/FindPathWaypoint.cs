@@ -59,10 +59,31 @@ public class FindPathWaypoint : MonoBehaviour {
         }
     }
 
-    public void FindPath()
+    public void FindAndGivePath()
+    {
+        List<Vector2> l = FindPath();
+
+        if (l == null)
+            return;
+
+        foreach(Vector2 v in l)
+        {
+            print(v);
+        }
+
+        // Give the player object a path that it will follow
+        PlayerFollowGridPath player = FindObjectOfType<PlayerFollowGridPath>();
+
+        // set up the player to move around
+        player.enabled = true;
+        player.transform.position = startPoint.transform.position;
+        player.FollowPath(l, endPoint.transform.position);
+    }
+
+    public List<Vector2> FindPath()
     {
         if (!start_placed || !end_placed)
-            return;
+            return null;
 
         Waypoint[] all_waypoints = FindObjectsOfType<Waypoint>();
 
@@ -87,6 +108,9 @@ public class FindPathWaypoint : MonoBehaviour {
             }
         }
 
+        print("start: " + first);
+        print("end: " + end);
+
         // Do A*
         List<wPoint> open = new List<wPoint>();
         open.Add(new wPoint(first));
@@ -103,7 +127,22 @@ public class FindPathWaypoint : MonoBehaviour {
             {
                 // found the end
                 print("reached the end, found a path");
-                return;
+                List<Vector2> path = new List<Vector2>();
+
+                wPoint p = best_point;
+
+                while (p != null)
+                {
+                    // equations to get the x and y pos in worldspace for our tiles.
+                    
+                    // push front of list
+                    path.Insert(0, new Vector2(p.waypoint.transform.position.x, p.waypoint.transform.position.y));
+
+                    // go to next node
+                    p = p.parent;
+                }
+
+                return path;
             }
 
             open.Remove(best_point);
@@ -113,6 +152,7 @@ public class FindPathWaypoint : MonoBehaviour {
                 cur_point.g = best_point.g + Vector2.Distance(best_point.waypoint.transform.position, w.transform.position);
                 cur_point.h = Heuristic(w.transform.position.x, w.transform.position.y, end.transform.position.x, end.transform.position.y);
                 cur_point.f = cur_point.g + cur_point.h;
+                cur_point.parent = best_point;
 
                 //PROF SLIDE PSUEDOCODE:
                 //if this neighbor is in the closed list and our current g value is lower
@@ -160,6 +200,7 @@ public class FindPathWaypoint : MonoBehaviour {
             close.Add(best_point);
         }
         print("could not find path :(");
+        return null;
     }
 
     wPoint FindXYInPointList(List<wPoint> l, Vector3 pos)
