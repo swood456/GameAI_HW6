@@ -12,6 +12,8 @@ public class TileInfo : MonoBehaviour {
 
     //dynamic info
     private bool changed = true;
+    public float cost;
+    public Vector2 prev;
     public bool searched = false;
     private SpriteRenderer img;
 
