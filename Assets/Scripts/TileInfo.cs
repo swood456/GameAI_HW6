@@ -11,16 +11,17 @@ public class TileInfo : MonoBehaviour {
     private int size;
 
     //dynamic info
-    private bool changed = true;
+    private bool changed;
     public float cost;
     public Vector2 prev;
     public bool searched = false;
-    private SpriteRenderer img;
+    public SpriteRenderer img;
 
     public void Start()
     {
         img = GetComponent<SpriteRenderer>();
         img.color = Color.black;
+        changed = true;
     }
 
     private void Update()
@@ -43,24 +44,30 @@ public class TileInfo : MonoBehaviour {
         }
     }
 
-    public void CreateFromChildren(int x_, int y_, TileInfo[] children)
+    public void CreateFromChildren(int x_, int y_, List<TileInfo> children)
     {
         x = x_;
         y = y_;
-        int numChild = children.Length;
-
         float freeSpace = 0;
-        foreach (TileInfo c in children)
+        if (children.Count > 0)
         {
-            freeSpace += c.free;
-            
-        }
-        free = freeSpace / numChild;
+            foreach (TileInfo c in children)
+            {
+                freeSpace += c.free;
+            }
+            free = freeSpace / children.Count;
 
-        if (free > 0.6)
-        {
-            passable = true;
+            if (free > 0.6)
+            {
+                passable = true;
+            }
         }
+        else
+        {
+            free = 0;
+            passable = false;
+        }
+
         changed = true;
     }
 
@@ -70,6 +77,7 @@ public class TileInfo : MonoBehaviour {
         y = y_;
         passable = true;
         free = 1;
+        GetComponent<SpriteRenderer>().enabled = false;
         changed = true;
     }
 
@@ -79,6 +87,8 @@ public class TileInfo : MonoBehaviour {
         y = y_;
         passable = false;
         free = 0;
+        GetComponent<SpriteRenderer>().enabled = false;
         changed = true;
+        
     }
 }

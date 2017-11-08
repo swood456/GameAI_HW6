@@ -26,13 +26,13 @@ public class WorldRep : MonoBehaviour {
     float heuristic_weight;
 
     //Compressed map info
-    //int Height, Width;
-    //GameObject[,] world;
+    int Height, Width;
+    GameObject[,] world;
 
     // Use this for initialization
     void Start () {
         GetMap();
-        //CreateWorldRep();
+        CreateWorldRep();
 	}
 
     private void Update()
@@ -80,49 +80,59 @@ public class WorldRep : MonoBehaviour {
         wholeMap = new GameObject[mapWidth, mapHeight];
 
         // go through all the stuff in the input file
-        for (int j = 4; j < lines.Length; ++j)
+        for (int j = 4; j < lines.Length && j - 4 < mapHeight; ++j)
         {
             for (int i = 0; i < mapWidth; ++i)
             {
                 // determine which of the tiles we are making
 
                 wholeMap[i, j-4] = Instantiate(genericTile, new Vector3(i, j-4, 0), Quaternion.identity);
-                switch (lines[j][i])
+                TileInfo t = wholeMap[i, j - 4].GetComponent<TileInfo>();
+                if (lines[j][i] == '.')
                 {
-                    case '@':
-                        wholeMap[i, j - 4].GetComponent<TileInfo>().CreateBlocked(i, j-4);
-                        break;
-                    case 'T':
-                        wholeMap[i, j - 4].GetComponent<TileInfo>().CreateBlocked(i, j - 4);
-                        break;
-                    default:
-                        wholeMap[i, j - 4].GetComponent<TileInfo>().CreateEmpty(i, j - 4);
-                        break;
+                    t.CreateEmpty(i, j - 4);
                 }
+                else
+                {
+                    t.CreateBlocked(i, j - 4);
+                }
+                
+                //switch ()
+                //{
+                //    case '@':
+                //        t.CreateBlocked(i, j-4);
+                //        break;
+                //    case 'T':
+                //        t.CreateBlocked(i, j - 4);
+                //        break;
+                //    default:
+                        
+                //        break;
+                //}
                 
             }
         }
     }
 
-    //void CreateWorldRep()
-    //{
-    //    Width = mapWidth % tileSize == 0 ? mapWidth / tileSize: mapWidth / tileSize + 1;
-    //    Height = mapHeight % tileSize == 0 ? mapHeight / tileSize : mapHeight / tileSize + 1;
-
-    //    world = new GameObject[Width, Height];
-    //    for (int i = 0; i < Width; i++)
-    //    {
-    //        for (int j = 0; j < Height; j++)
-    //        {
-    //            world[i,j] = Instantiate(genericTile, new Vector3(i, j - 4, 0), Quaternion.identity);
-    //            world[i, j].GetComponent<TileInfo>().CreateFromChildren(i, j, GetChildren(tileSize, i, j));
-    //        }
-    //    }
-    //}
-
-    TileInfo[] GetChildren(int size, int x, int y)
+    void CreateWorldRep()
     {
-        TileInfo[] children = new TileInfo[size*size];
+        Width = mapWidth % tileSize == 0 ? mapWidth / tileSize : mapWidth / tileSize + 1;
+        Height = mapHeight % tileSize == 0 ? mapHeight / tileSize : mapHeight / tileSize + 1;
+
+        world = new GameObject[Width, Height];
+        for (int i = 0; i < Width; i++)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                world[i, j] = Instantiate(genericTile, new Vector3(i, j, 0), Quaternion.identity);
+                world[i, j].GetComponent<TileInfo>().CreateFromChildren(i, j, GetChildren(tileSize, i, j));
+            }
+        }
+    }
+
+    List<TileInfo> GetChildren(int size, int x, int y)
+    {
+        List<TileInfo> children = new List<TileInfo>();
         int xStart = size * x;
         int yStart = size * y;
 
@@ -132,19 +142,11 @@ public class WorldRep : MonoBehaviour {
             for (int l = 0; l < tileSize; l++)
             {
                 int thisy = yStart + l;
-                int childnum = k * size + l;
-
-                // if the child is in wholeMap, it is added
-                if (thisx < mapWidth && thisy < mapHeight){
-                    children[childnum] = wholeMap[thisx, thisy].GetComponent<TileInfo>();
-                }
-                else
+                if (thisx < mapWidth-1 && thisy < mapHeight-1)
                 {
-                    //if no in wholeMap, assume child is impassable
-                    TileInfo blockedTile = new TileInfo();
-                    blockedTile.CreateBlocked(thisx, thisy);
-                    children[childnum] = blockedTile;
+                    children.Add(wholeMap[thisx, thisy].GetComponent<TileInfo>());
                 }
+                
             }
         }
         return children;
