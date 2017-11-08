@@ -87,6 +87,18 @@ public class CreateWorldFromMap : MonoBehaviour {
     bool start_placed = false;
     bool end_placed = false;
 
+    float heuristic_weight;
+
+    public void update_heuristic(float v)
+    {
+        heuristic_weight = v;
+    }
+
+    public void update_type(int i)
+    {
+        m_heruistic = (HeuristicType)i;
+    }
+
     // Use this for initialization
     void Start () {
         map_root = new GameObject("Map_Root");
@@ -361,9 +373,9 @@ public class CreateWorldFromMap : MonoBehaviour {
         switch (m_heruistic)
         {
             case HeuristicType.Euclidian:
-                return HeuristicEuclidianDist(x, y, endX, endY);
+                return heuristic_weight * HeuristicEuclidianDist(x, y, endX, endY);
             case HeuristicType.Manhattan:
-                return HeuristicManhattanDist(x, y, endX, endY);
+                return heuristic_weight * HeuristicManhattanDist(x, y, endX, endY);
         }
         // in case something broke?
         return 0.0f;
