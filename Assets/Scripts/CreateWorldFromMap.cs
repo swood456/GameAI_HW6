@@ -55,6 +55,7 @@ public class CreateWorldFromMap : MonoBehaviour {
     public GameObject endPoint;
     public GameObject tile_outline;
     public GameObject redDot;
+    public GameObject tileData;
 
     [SerializeField]
     private float tile_threshold_to_move = 0.5f;
@@ -68,6 +69,7 @@ public class CreateWorldFromMap : MonoBehaviour {
     float top;
     GameObject map_root;
     float[,] map_representation;
+    TileInfo[,] world;
     bool start_placed = false;
     bool end_placed = false;
 
@@ -401,6 +403,7 @@ public class CreateWorldFromMap : MonoBehaviour {
 
         // make a float 2d array to store the % of each tile that is covered
         map_representation = new float[tile_map_width, tile_map_height];
+        world = new TileInfo[tile_map_width, tile_map_height];
 
         // helper int that is just the area of each tile (for creating the map_rep above)
         int tile_area = num_squares_per_tile_x * num_squares_per_tile_y;
