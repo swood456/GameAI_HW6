@@ -198,9 +198,10 @@ public class CreateWorldFromMap : MonoBehaviour {
 
                 while(p != null)
                 {
-                    float fx = left_side + p.x * num_squares_per_tile_x * image_square_size;
-                    float fy = top - p.y * num_squares_per_tile_y * image_square_size;
-                    path.Insert(0, new Vector2(fx, fy));
+                    // equations to get the x and y pos in worldspace for our tiles.
+                    float x = left_side + (num_squares_per_tile_x - (1.0f + num_squares_per_tile_x) / 2) * image_square_size + p.x * num_squares_per_tile_x * image_square_size;
+                    float y = top - (num_squares_per_tile_y - (1.0f + num_squares_per_tile_y) / 2) * image_square_size - p.y * num_squares_per_tile_y * image_square_size;
+                    path.Insert(0, new Vector2(x, y));
                     //path.Insert(0, new Vector2(p.x, p.y));
                     p = p.parent;
                 }
@@ -279,9 +280,11 @@ public class CreateWorldFromMap : MonoBehaviour {
                 if(same_close == null && same_open == null)
                 {
                     open_points.Add(successor);
-                    float x = left_side + successor.x * num_squares_per_tile_x * image_square_size;
-                    float y = top - successor.y * num_squares_per_tile_y * image_square_size;
-                    Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity);
+                    // equations to get the x and y pos in worldspace for our tiles.
+                    float x = left_side + (num_squares_per_tile_x - (1.0f + num_squares_per_tile_x) / 2) * image_square_size + successor.x * num_squares_per_tile_x * image_square_size;
+                    float y = top - (num_squares_per_tile_y - (1.0f + num_squares_per_tile_y) / 2) * image_square_size - successor.y * num_squares_per_tile_y * image_square_size;
+                    GameObject g = Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity);
+                    
                 }
             }
 
@@ -422,18 +425,26 @@ public class CreateWorldFromMap : MonoBehaviour {
         {
             for(int i = 0; i < tile_map_width; ++i)
             {
-                float x = left_side + i * num_squares_per_tile_x * image_square_size;
-                float y = top - j * num_squares_per_tile_y * image_square_size;
-                Instantiate(tile_outline, new Vector2(x,y), Quaternion.identity);
+                // equations to get the x and y pos in worldspace for our tiles.
+                float x = left_side + (num_squares_per_tile_x - (1.0f + num_squares_per_tile_x) / 2) * image_square_size + i * num_squares_per_tile_x * image_square_size;
+                float y = top - (num_squares_per_tile_y - (1.0f + num_squares_per_tile_y) / 2) * image_square_size - j * num_squares_per_tile_y * image_square_size;
+
+                GameObject g = Instantiate(tile_outline, new Vector2(x,y), Quaternion.identity);
+                Vector3 scale = g.transform.localScale;
+                scale.x = (float)num_squares_per_tile_x / 2;
+                scale.y = (float)num_squares_per_tile_y / 2;
+
+                g.transform.localScale = scale;
+                print(g.transform.localScale);
             }
         }
 
-        //for(int j = 0; j < tile_map_width; ++j)
-        //{
-        //    for(int i = 0; i < tile_map_height; ++i)
-        //    {
-        //        print(map_representation[i,j]);
-        //    }
-        //}
+        for (int j = 0; j < tile_map_width; ++j)
+        {
+            for (int i = 0; i < tile_map_height; ++i)
+            {
+                print("i, j:" + i + ", " + j + " | " + map_representation[i, j]);
+            }
+        }
     }
 }

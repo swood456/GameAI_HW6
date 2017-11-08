@@ -8,7 +8,7 @@ public class PlayerFollowGridPath : MonoBehaviour {
     private float move_speed;
 
     List<Vector2> cur_path;
-    int index = 0;
+    int index = 1;
     Vector2 end;
 
     bool is_active = false;
@@ -17,12 +17,12 @@ public class PlayerFollowGridPath : MonoBehaviour {
     {
         cur_path = path;
         end = end_pos;
-        index = 0;
+        index = 1;
     }
 
     private void Update()
     {
-        if(index < cur_path.Count)
+        if(index < cur_path.Count - 1)
         {
             //print("dest: " + new Vector2(cur_path[index].x, cur_path[index].y));
             if (Vector2.Distance(transform.position, new Vector2(cur_path[index].x, cur_path[index].y)) < move_speed * Time.deltaTime)
