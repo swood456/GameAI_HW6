@@ -56,7 +56,10 @@ MonoBehaviour:
   y: 0
   passable: 0
   free: 0
+  cost: 0
+  prev: {x: 0, y: 0}
   searched: 0
+  img: {fileID: 0}
 --- !u!212 &212455629759248922
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -89,7 +92,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 143e06306661d8c42a60e3923858fced, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 35106f316ab69c94da2586b1cb2364f9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

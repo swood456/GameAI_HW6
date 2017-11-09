@@ -856,7 +856,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 47d430af5687e6f48a567415e0242805, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6eb6157092b849747927f3f65c8a6618, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -873,7 +873,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 600402402}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.475082, y: 5.8593187, z: 0}
+  m_LocalPosition: {x: -34.338024, y: 5.8593187, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1097,7 +1097,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: eb0dd5c6a17f20740a77612387763458, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 06142e3fbf0e7e445b29fcfd6e971086, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1114,7 +1114,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 712342336}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.187057, y: 3.785542, z: 0}
+  m_LocalPosition: {x: -34.05, y: 3.785542, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1273,11 +1273,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4255688077755316, guid: e1dc19b40b008fc4d8352d9f34044a34, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -6.6
+      value: -34.56
       objectReference: {fileID: 0}
     - target: {fileID: 4255688077755316, guid: e1dc19b40b008fc4d8352d9f34044a34, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.17
+      value: 2.35
       objectReference: {fileID: 0}
     - target: {fileID: 4255688077755316, guid: e1dc19b40b008fc4d8352d9f34044a34, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1317,6 +1317,12 @@ Prefab:
       propertyPath: move_speed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 212356284770866806, guid: e1dc19b40b008fc4d8352d9f34044a34,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 95f7d37b7a2dc2c479b8f0332bc3403e,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e1dc19b40b008fc4d8352d9f34044a34, type: 2}
   m_IsPrefabParent: 0
