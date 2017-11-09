@@ -1351,8 +1351,8 @@ MonoBehaviour:
     type: 2}
   input_map: {fileID: 4900000, guid: e2326e54cce6b324da389d9dcc294bf7, type: 3}
   tileSize: 4
-  startPoint: {fileID: 0}
-  endPoint: {fileID: 0}
+  startPoint: {fileID: 600402402}
+  endPoint: {fileID: 712342336}
 --- !u!4 &850206380
 Transform:
   m_ObjectHideFlags: 0

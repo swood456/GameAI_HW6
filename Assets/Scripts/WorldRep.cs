@@ -186,13 +186,13 @@ public class WorldRep : MonoBehaviour {
         e_j = Mathf.RoundToInt(endPoint.transform.position.y);
 
         // error if the start or end is outside of the square map
-        if (s_i < 0 || s_i >= mapWidth || s_j < 0 || s_j >= mapHeight)
+        if (s_i < 0 || s_i >= Width || s_j < 0 || s_j >= Height)
         {
             print("error: placed start tile off map");
             return null;
         }
 
-        if (e_i < 0 || e_i >= mapWidth || e_j < 0 || e_j >= mapHeight)
+        if (e_i < 0 || e_i >= Width || e_j < 0 || e_j >= Height)
         {
             print("error: placed end tile off map");
             return null;
@@ -400,25 +400,25 @@ public class WorldRep : MonoBehaviour {
         List<Vector2> adjacent = new List<Vector2>();
 
         // left
-        if (x > 0 && wholeMap[x - 1, y].GetComponent<TileInfo>().passable)
+        if (x > 0 && world[x - 1, y].GetComponent<TileInfo>().passable)
         {
             adjacent.Add(new Vector2(x - 1, y));
         }
 
         // right
-        if (x < mapWidth - 1 && wholeMap[x + 1, y].GetComponent<TileInfo>().passable)
+        if (x < Width - 1 && world[x + 1, y].GetComponent<TileInfo>().passable)
         {
             adjacent.Add(new Vector2(x + 1, y));
         }
 
         // up
-        if (y > 0 && wholeMap[x, y - 1].GetComponent<TileInfo>().passable)
+        if (y > 0 && world[x, y - 1].GetComponent<TileInfo>().passable)
         {
             adjacent.Add(new Vector2(x, y - 1));
         }
 
         // down
-        if (y < mapHeight - 1 && wholeMap[x, y + 1].GetComponent<TileInfo>().passable)
+        if (y < Height - 1 && world[x, y + 1].GetComponent<TileInfo>().passable)
         {
             adjacent.Add(new Vector2(x, y + 1));
         }

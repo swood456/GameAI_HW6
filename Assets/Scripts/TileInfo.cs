@@ -35,7 +35,14 @@ public class TileInfo : MonoBehaviour {
             Color newColor = Color.white;
             newColor.r = s;
             newColor.b = s;
-            newColor.g = s;
+            if (searched)
+            {
+                newColor.g = 255;
+            }
+            else
+            {
+                newColor.g = s;
+            }
 
             //modify the alpha value of the color based on the percent of free space in this tile
             img.color = newColor;
