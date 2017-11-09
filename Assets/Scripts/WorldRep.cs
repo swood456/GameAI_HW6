@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WorldRep : MonoBehaviour {
 
+    public enum heuristic_type { Euclidian, Manhattan};
+    heuristic_type m_type = heuristic_type.Euclidian;
+
     //base map info
     int mapHeight, mapWidth;
 
@@ -23,7 +26,7 @@ public class WorldRep : MonoBehaviour {
     bool start_placed = false;
     bool end_placed = false;
 
-    float heuristic_weight;
+    float heuristic_weight = 1.0f;
 
     //Compressed map info
     int Height, Width;
@@ -61,6 +64,16 @@ public class WorldRep : MonoBehaviour {
                 end_placed = true;
             }
         }
+    }
+
+    public void set_heuristic_type(int i)
+    {
+        m_type = (heuristic_type) i;
+    }
+
+    public void set_heuristic_weight(float f)
+    {
+        heuristic_weight = f;
     }
 
     // create a representation of all map spaces
@@ -429,15 +442,15 @@ public class WorldRep : MonoBehaviour {
     //  this uses the m_heuristic variable to determine which function to use
     private float Heuristic(int x, int y, int endX, int endY)
     {
-        //// note: here is where we multiply by the weight, which can be set in the GUI
-        //switch (m_heruistic)
-        //{
-        //    case HeuristicType.Euclidian:
-        //        return heuristic_weight * HeuristicEuclidianDist(x, y, endX, endY);
-        //    case HeuristicType.Manhattan:
-        //        return heuristic_weight * HeuristicManhattanDist(x, y, endX, endY);
-        //}
-        //// in case something broke?
+        // note: here is where we multiply by the weight, which can be set in the GUI
+        switch (m_type)
+        {
+            case heuristic_type.Euclidian:
+                return heuristic_weight * HeuristicEuclidianDist(x, y, endX, endY);
+            case heuristic_type.Manhattan:
+                return heuristic_weight * HeuristicManhattanDist(x, y, endX, endY);
+        }
+        // in case something broke?
         return 0.0f;
     }
 
@@ -464,6 +477,11 @@ class PriorityQueue
 {
     private List<PriorityPair> queue;
     public int size = 0;
+
+    public PriorityQueue()
+    {
+        queue = new List<PriorityPair>();
+    }
 
     public void Add(float p, Vector2 l)
     {
