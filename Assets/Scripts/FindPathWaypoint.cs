@@ -30,6 +30,19 @@ public class FindPathWaypoint : MonoBehaviour {
     bool start_placed = false;
     bool end_placed = false;
 
+    public GameObject redDot;
+    public GameObject greenDot;
+    GameObject dotParent;
+
+    public void update_weight(float v)
+    {
+        heuristic_weight = v;
+    }
+
+    public void update_type(int i)
+    {
+        m_heruistic = (HeuristicType)i;
+    }
 
     private void Update()
     {
@@ -85,6 +98,12 @@ public class FindPathWaypoint : MonoBehaviour {
         if (!start_placed || !end_placed)
             return null;
 
+        if (dotParent != null)
+        {
+            Destroy(dotParent);
+        }
+        dotParent = new GameObject("Dot_Parent");
+
         Waypoint[] all_waypoints = FindObjectsOfType<Waypoint>();
 
         Waypoint first = null;
@@ -137,7 +156,7 @@ public class FindPathWaypoint : MonoBehaviour {
                     
                     // push front of list
                     path.Insert(0, new Vector2(p.waypoint.transform.position.x, p.waypoint.transform.position.y));
-
+                    Instantiate(greenDot, new Vector3(p.waypoint.transform.position.x, p.waypoint.transform.position.y, -3), Quaternion.identity, dotParent.transform);
                     // go to next node
                     p = p.parent;
                 }
@@ -195,6 +214,7 @@ public class FindPathWaypoint : MonoBehaviour {
                 if (same_close == null && same_open == null)
                 {
                     open.Add(cur_point);
+                    GameObject g = Instantiate(redDot, new Vector3(cur_point.waypoint.transform.position.x, cur_point.waypoint.transform.position.y, -2), Quaternion.identity, dotParent.transform);
                 }
             }
             close.Add(best_point);

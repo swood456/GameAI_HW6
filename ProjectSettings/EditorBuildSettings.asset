@@ -4,4 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/level.unity
+    guid: c6ecc5154fed88f4d902134716b129c6
+  - enabled: 1
+    path: Assets/Scenes/waypoint_1.unity
+    guid: 9bfe81ae4987b4e47a2accea910dc094
+  - enabled: 1
+    path: Assets/Scenes/hart_grid.unity
+    guid: b5aa47d5063b2ae45874f6f4e9fdad0f

@@ -55,6 +55,8 @@ public class CreateWorldFromMap : MonoBehaviour {
     public GameObject endPoint;
     public GameObject tile_outline;
     public GameObject redDot;
+    public GameObject greenDot;
+    GameObject dotParent;
 
     [SerializeField]
     private float tile_threshold_to_move = 0.5f;
@@ -71,7 +73,7 @@ public class CreateWorldFromMap : MonoBehaviour {
     bool start_placed = false;
     bool end_placed = false;
 
-    float heuristic_weight;
+    float heuristic_weight = 1.0f;
 
     public void update_heuristic(float v)
     {
@@ -137,6 +139,11 @@ public class CreateWorldFromMap : MonoBehaviour {
     
     public List<Vector2> FindPath()
     {
+        if(dotParent != null)
+        {
+            Destroy(dotParent);
+        }
+        dotParent = new GameObject("Dot_Parent");
         // make sure that the start and end points are located
         if (!start_placed || !end_placed)
             return null;
@@ -209,6 +216,7 @@ public class CreateWorldFromMap : MonoBehaviour {
 
                     // push front of list
                     path.Insert(0, new Vector2(x, y));
+                    Instantiate(greenDot, new Vector3(x, y, -3), Quaternion.identity, dotParent.transform);
 
                     // go to next node
                     p = p.parent;
@@ -278,7 +286,8 @@ public class CreateWorldFromMap : MonoBehaviour {
                     float y = top - (num_squares_per_tile_y - (1.0f + num_squares_per_tile_y) / 2) * image_square_size - successor.y * num_squares_per_tile_y * image_square_size;
 
                     // make a red dot that signifies that we have started to look at this node but not yet considered its neighbors
-                    GameObject g = Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity); 
+                    //GameObject g = Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity); 
+                    GameObject g = Instantiate(redDot, new Vector3(x, y, -2), Quaternion.identity, dotParent.transform);
                 }
             }
 
